@@ -36,6 +36,7 @@ namespace Electronic__Journal.Services
                             User user = new User()
                             {
                                 Id = Convert.ToInt32(reader["Id"]),
+                                Login = reader["Login"].ToString(),
                                 FirstName = reader["FirstName"].ToString(),
                                 MiddleName = reader["MiddleName"].ToString(),
                                 LastName = reader["LastName"].ToString(),

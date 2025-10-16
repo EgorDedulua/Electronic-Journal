@@ -19,7 +19,7 @@
                     <label for="password">Пароль</label>
                     <input type="password" id="password" required>
                 </div>
-                <button type="submit" class="btn">Войти</button>
+                <button type="submit" id="btn" onclick="login()">Войти</button>
             </form>
             <div style="text-align: center; margin-top: 20px; color: #9ca3af; font-size: 13px;">
                 V 0.1
@@ -27,6 +27,32 @@
         </div>
     </div>
 
-    <script src="js/auth.js"></script>
+    <script>
+        async function login() {
+            const url = "https://localhost:7176"
+            const username = document.getElementById('login').value
+            const password = document.getElementById('password').value
+
+            try {
+                const response = await fetch(`${url}/User`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json', // Добавлен заголовок
+                    },
+                    body: JSON.stringify({ Username: username, Password: password })
+                })
+
+                if (response.status == '200') {
+                    document.getElementById('btn').textContent = "Успех!"
+                }
+                else {
+                    document.getElementById('btn').textContent = "Неверно!"
+                }
+            }
+            catch (error) {
+                document.getElementById('btn').textContent = "Ошибка!"
+            }
+        }
+    </script>
 </body>
 </html>

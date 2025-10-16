@@ -51,11 +51,16 @@ namespace Electronic__Journal.Controllers
                     return Ok(user);
                 }
             }
+            catch (InvalidOperationException)
+            {
+                _logger.LogError("Некорректный формат Json!");
+                return BadRequest("Некорректный формат Json!");
+            }
             catch (Exception ex)
             {
                 request.TryGetProperty("Login", out JsonElement login);
                 _logger.LogError(ex, $"Ошибка на стороне сервера при обработке запроса авторизации пользователя {login.GetString()}");
-                return BadRequest("Ошибка сервера!");
+                return StatusCode(500, "Ошибка сервера!");
             }
         }
     }
