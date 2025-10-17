@@ -6,13 +6,13 @@
 
         public string? Login { get; init; }
 
+        public string? LastName { get; init; }
+
         public string? FirstName { get; init; }
 
         public string? MiddleName { get; init; }
 
-        public string? LastName { get; init; }
-
-        public string? Group { get; set; }
+        public int? GroupId { get; set; }
         
         public UserType Type { get; set; }
 

@@ -19,7 +19,7 @@ namespace Electronic__Journal.Controllers
             _logger = logger;
         }
 
-        [HttpPost("login")]
+        [HttpGet("login")]
         public async Task<IActionResult> Login([FromBody] JsonElement request)
         {
             try
@@ -47,7 +47,7 @@ namespace Electronic__Journal.Controllers
                 }
                 else
                 {
-                    _logger.LogInformation($"Пользователь {login.GetString()} Id: {user.Id} Фамилия: {user.LastName} Имя: {user.FirstName} Отчество: {user.MiddleName} Группа: {user.Group} успешно вошел");
+                    _logger.LogInformation($"Пользователь {login.GetString()} Id: {user.Id} Фамилия: {user.LastName} Имя: {user.FirstName} Отчество: {user.MiddleName} Группа: {user.GroupId} успешно вошел");
                     return Ok(user);
                 }
             }
@@ -58,8 +58,7 @@ namespace Electronic__Journal.Controllers
             }
             catch (Exception ex)
             {
-                request.TryGetProperty("Login", out JsonElement login);
-                _logger.LogError(ex, $"Ошибка на стороне сервера при обработке запроса авторизации пользователя {login.GetString()}");
+                _logger.LogError(ex, $"Ошибка на стороне сервера при обработке запроса авторизации пользователя");
                 return StatusCode(500, "Ошибка сервера!");
             }
         }

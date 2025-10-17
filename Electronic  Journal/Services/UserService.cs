@@ -22,13 +22,15 @@ namespace Electronic__Journal.Services
 
             try
             {
-                using (var coneection = new SqliteConnection(_connectionString))
+                using (var connection = new SqliteConnection(_connectionString))
                 {
-                    await coneection.OpenAsync();
+                    var connectionTask = connection.OpenAsync();
                     string commandText = "SELECT * FROM Users WHERE Login=@login AND Password=@password";
-                    var command = new SqliteCommand(commandText, coneection);
+                    var command = new SqliteCommand(commandText);
                     command.Parameters.Add(new SqliteParameter("@login", login));
                     command.Parameters.Add(new SqliteParameter("@password", password));
+                    await connectionTask;
+                    command.Connection = connection;
                     using (var reader = await command.ExecuteReaderAsync())
                     {
                         if (await reader.ReadAsync())
@@ -38,19 +40,19 @@ namespace Electronic__Journal.Services
                                 Id = Convert.ToInt32(reader["Id"]),
                                 Login = reader["Login"].ToString(),
                                 FirstName = reader["FirstName"].ToString(),
-                                MiddleName = reader["MiddleName"].ToString(),
                                 LastName = reader["LastName"].ToString(),
+                                MiddleName = reader["MiddleName"].ToString()
                             };
 
                             if (reader["Type"].ToString() == "Преподаватель")
                             {
                                 user.Type = UserType.Teacher;
-                                user.Group = null;
+                                user.GroupId = null;
                             }
                             else
                             {
                                 user.Type = UserType.Student;
-                                user.Group = reader["Group"].ToString();
+                                user.GroupId = Convert.ToInt32(reader["GroupId"]);
                             }
                             _logger.LogInformation($"Успешная авторизация пользователя {login}");
                             return user;

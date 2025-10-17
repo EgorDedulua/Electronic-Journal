@@ -1,0 +1,41 @@
+﻿using Electronic__Journal.Models;
+using Electronic__Journal.Services;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Electronic__Journal.Controllers
+{
+    [Controller]
+    [Route("[controller]")]
+    public class StudentController : Controller
+    {
+        private readonly IStudentService _studentService;
+        private readonly ILogger _logger;
+
+        public StudentController(IStudentService studentService, ILogger<StudentController> logger)
+        {
+            _studentService = studentService;
+            _logger = logger;
+        }
+
+        [HttpGet("/subjects/{studentId}")]
+        public async Task<IActionResult> GetStudentSubjects(int groupId)
+        {
+            try
+            {
+                LinkedList<Subject> subjects = await _studentService.GetStudentSubjectsAsync(groupId);
+                if (subjects == null)
+                {
+                    _logger.LogError($"Не найдены предметы у студента с группой {groupId}");
+                    return BadRequest("Не найдены предметы студента!");
+                }
+                _logger.LogInformation($"Найдены предметы у студента с группой {groupId}");
+                return Ok(subjects);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Неизвестная ошибка на стороне сервера!");
+                return StatusCode(500, "На сервере произошла ошибка при обработке запроса!");
+            }
+        }
+    }
+}
