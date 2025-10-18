@@ -21,7 +21,9 @@ namespace Electronic__Journal.Services
                 using (var connection = new SqliteConnection(_connectionString))
                 {
                     var connectionTask = connection.OpenAsync();
-                    string commandText = "SELECT SubjectId FROM Groups_Subjects WHERE GroupId=@groupId";
+                    string commandText = @"SELECT Groups_Subjects.SubjectId, Subjects.Name FROM Groups_Subjects
+                                           JOIN Subjects ON Subjects.Id = Groups_Subjects.SubjectId
+                                           WHERE Groups_Subjects.GroupId = @groupId";
                     var command = new SqliteCommand(commandText);
                     command.Parameters.Add(new SqliteParameter("@groupId", groupId));
                     await connectionTask;
@@ -29,18 +31,11 @@ namespace Electronic__Journal.Services
                     using (var reader = await command.ExecuteReaderAsync())
                     {
                         if (reader.HasRows)
-                        {
-                            int subjectId;
-                            string subjectName;
-                            commandText = "SELECT Name FROM Subjects WHERE Id=@id";
-                            command = new SqliteCommand(commandText, connection);
+                        { 
                             LinkedList<Subject> subjectList = new LinkedList<Subject>();
                             while (await reader.ReadAsync())
                             {
-                                subjectId = Convert.ToInt32(reader["SubjectId"]);
-                                command.Parameters.AddWithValue("@id", subjectId);
-                                subjectName= Convert.ToString(await command.ExecuteScalarAsync())!;
-                                subjectList.AddLast(new Subject() { Id = subjectId,  Name = subjectName});
+                                subjectList.AddLast(new Subject() { Id = Convert.ToInt32(reader["SubjectId"]),  Name = reader["Name"].ToString() });
                             }
                             return subjectList;
                         }
