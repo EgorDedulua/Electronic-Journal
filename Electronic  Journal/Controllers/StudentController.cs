@@ -9,7 +9,7 @@ namespace Electronic__Journal.Controllers
     public class StudentController : Controller
     {
         private readonly IStudentService _studentService;
-        private readonly ILogger _logger;
+        private readonly ILogger<StudentController> _logger;
 
         public StudentController(IStudentService studentService, ILogger<StudentController> logger)
         {
@@ -17,7 +17,7 @@ namespace Electronic__Journal.Controllers
             _logger = logger;
         }
 
-        [HttpGet("/subjects/{studentId}")]
+        [HttpGet("subjects/{groupId}")]
         public async Task<IActionResult> GetStudentSubjects(int groupId)
         {
             try
@@ -26,7 +26,7 @@ namespace Electronic__Journal.Controllers
                 if (subjects == null)
                 {
                     _logger.LogError($"Не найдены предметы у студента с группой {groupId}");
-                    return BadRequest("Не найдены предметы студента!");
+                    return BadRequest("Не найдены предметы!");
                 }
                 _logger.LogInformation($"Найдены предметы у студента с группой {groupId}");
                 return Ok(subjects);

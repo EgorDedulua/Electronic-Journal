@@ -12,6 +12,8 @@ namespace Electronic__Journal
 
             builder.Services.AddControllers();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IStudentService, StudentService>();
+            builder.Services.AddScoped<ITeacherService, TeacherService>();
             builder.Services.AddLogging();
             var app = builder.Build();
 
