@@ -13,6 +13,8 @@
         public string? MiddleName { get; init; }
 
         public int? GroupId { get; set; }
+
+        public string? DateOfBirth { get; init; }
         
         public UserType Type { get; set; }
 

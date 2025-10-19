@@ -28,6 +28,7 @@ namespace Electronic__Journal.Services
                     command.Parameters.Add(new SqliteParameter("@groupId", groupId));
                     await connectionTask;
                     command.Connection = connection;
+
                     using (var reader = await command.ExecuteReaderAsync())
                     {
                         if (reader.HasRows)
@@ -53,5 +54,60 @@ namespace Electronic__Journal.Services
                 return null!;
             }
         }
+
+        public async Task<LinkedList<Mark>> GetStudentMarksAsync(int studentId)
+        {
+            try
+            {
+                using (var connection = new SqliteConnection(_connectionString))
+                {
+                    var connectionTask = connection.OpenAsync();
+                    string commandText = @"SELECT Marks.Id, Marks.""Date"", Marks.Mark, Subjects.Name AS SubjectName,
+                                           group_concat(Users.LastName || ' ' || Users.FirstName || ' ' || Users.MiddleName, ',') AS TeacherName
+                                           FROM Marks
+                                           JOIN Subjects ON Marks.SubjectId = Subjects.Id
+                                           JOIN Users ON Users.Id = Marks.TeacherId
+                                           WHERE Marks.StudentId = @studentId
+                                           GROUP BY Marks.Id, Marks.""Date"", Subjects.Name;
+                                            ";
+                    var command = new SqliteCommand(commandText);
+                    command.Parameters.AddWithValue("@studentId", studentId);
+                    await connectionTask;
+                    command.Connection = connection;
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        if (reader.HasRows)
+                        {
+                            LinkedList<Mark> markList = new LinkedList<Mark>();
+                            while (await reader.ReadAsync())
+                            {
+                                markList.AddLast(new Mark()
+                                {
+                                    Id = Convert.ToInt32(reader["Id"].ToString()),
+                                    StudentId = studentId,
+                                    Value = Convert.ToInt32(reader["Mark"]),
+                                    SubjectName = reader["SubjectName"].ToString(),
+                                    TeacherName = reader["TeacherName"].ToString(),
+                                    Date = reader["Date"].ToString()
+                                });
+                            }
+                            return markList;
+                        }
+                        else
+                        {
+                            _logger.LogError($"Не найдены оценки для пользователя с Id {studentId}");
+                            return null!;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Неизвестная ошибка на стороне сервера");
+                return null!;
+            }
+        }
+
     }
 }

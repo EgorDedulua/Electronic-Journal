@@ -7,5 +7,7 @@ namespace Electronic__Journal.Services
     public interface IStudentService
     {
         Task<LinkedList<Subject>> GetStudentSubjectsAsync(int groupId);
+
+        Task<LinkedList<Mark>> GetStudentMarksAsync(int studentId);
     }
 }

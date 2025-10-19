@@ -41,7 +41,8 @@ namespace Electronic__Journal.Services
                                 Login = reader["Login"].ToString(),
                                 FirstName = reader["FirstName"].ToString(),
                                 LastName = reader["LastName"].ToString(),
-                                MiddleName = reader["MiddleName"].ToString()
+                                MiddleName = reader["MiddleName"].ToString(),
+                                DateOfBirth = reader["DateOfBirth"].ToString()
                             };
 
                             if (reader["Type"].ToString() == "Преподаватель")

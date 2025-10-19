@@ -1,6 +1,7 @@
 ﻿using Electronic__Journal.Models;
 using Electronic__Journal.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
 
 namespace Electronic__Journal.Controllers
 {
@@ -30,6 +31,27 @@ namespace Electronic__Journal.Controllers
                 }
                 _logger.LogInformation($"Найдены предметы у студента с группой {groupId}");
                 return Ok(subjects);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Неизвестная ошибка на стороне сервера!");
+                return StatusCode(500, "На сервере произошла ошибка при обработке запроса!");
+            }
+        }
+
+        [HttpGet("{studentId}/marks")]
+        public async Task<IActionResult> GetStudentMarks(int studentId)
+        {
+            try
+            {
+                LinkedList<Mark> markList = await _studentService.GetStudentMarksAsync(studentId);
+                if (markList == null)
+                {
+                    _logger.LogError($"У студента с id {studentId} не найдены оценки");
+                    return NoContent();
+                }
+                _logger.LogError($"Найдены оценки для студента с id {studentId}");
+                return Ok(markList);
             }
             catch (Exception ex)
             {
