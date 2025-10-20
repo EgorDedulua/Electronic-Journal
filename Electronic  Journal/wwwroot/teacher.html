@@ -7,66 +7,83 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header class="header">
-        <div class="header-content">
-            <div>
-                <h1>Электронный журнал</h1>
-                <div class="header-role">Преподаватель</div>
-            </div>
-            <div class="user-info">
-                <div class="user-details">
-                    <div class="user-name" id="teacherName"></div>
+    <!-- Teacher Dashboard -->
+    <div id="teacherDashboard">
+        <header class="header">
+            <div class="header-content">
+                <div>
+                    <h1>Электронный журнал</h1>
+                    <div class="header-role">Преподаватель</div>
                 </div>
-                <button class="logout-btn" onclick="logout()">Выход</button>
-            </div>
-        </div>
-    </header>
-
-    <main class="main-content">
-        <h2 class="page-title">Выставление оценок</h2>
-        <p class="page-subtitle">Выберите группу, предмет и дату для редактирования оценок</p>
-
-        <div class="controls-panel">
-            <div class="control-group">
-                <label for="groupSelect">Группа:</label>
-                <select id="groupSelect">
-                    <option value="Т-291">Т-291</option>
-                    <option value="Т-292">Т-292</option>
-                </select>
-            </div>
-            <div class="control-group">
-                <label for="subjectSelect">Предмет:</label>
-                <select id="subjectSelect"></select>
-            </div>
-            <div class="control-group">
-                <label for="dateInput">Дата:</label>
-                <div class="date-controls">
-                    <input type="text" id="dateInput" class="date-input" placeholder="дд.мм.гггг">
-                    <button type="button" class="btn calendar-btn">📅</button>
+                <div class="user-info">
+                    <div class="user-details">
+                        <div class="user-name" id="teacherName"></div>
+                    </div>
+                    <button class="logout-btn" onclick="logout()">Выход</button>
                 </div>
-                <div id="calendarPopup" class="calendar-popup hidden"></div>
             </div>
-            <button class="save-btn" id="saveBtn">Сохранить изменения</button>
-        </div>
+        </header>
 
-        <div class="table-container">
-            <table class="grades-table" id="teacherTable">
-                <thead id="teacherTableHead"></thead>
-                <tbody id="teacherTableBody"></tbody>
-            </table>
-        </div>
+        <main class="main-content">
+            <h2 class="page-title">Выставление оценок и посещаемости</h2>
+            <p class="page-subtitle">Выберите группу, предмет и дату для редактирования</p>
 
-        <div class="instructions">
-            <h3>Инструкция</h3>
-            <ul>
-                <li>Выберите дату с помощью календаря или введите вручную в формате дд.мм.гггг</li>
-                <li>Кликните на ячейку для ввода или изменения оценки</li>
-                <li>Введите числовую оценку (1-10) или текстовую (ЗЧ, Н и т.д.)</li>
-                <li>Оставьте поле пустым для удаления оценки</li>
-                <li>Не забудьте нажать "Сохранить изменения" после редактирования</li>
-            </ul>
-        </div>
-    </main>
+            <div class="controls-panel">
+                <div class="control-group">
+                    <label for="groupSelect">Группа:</label>
+                    <select id="groupSelect">
+                        <option value="Т-291">Т-291</option>
+                        <option value="Т-292">Т-292</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="subjectSelect">Предмет:</label>
+                    <select id="subjectSelect"></select>
+                </div>
+                <div class="control-group">
+                    <label for="dateInput">Дата:</label>
+                    <div class="date-controls">
+                        <input type="text" id="dateInput" class="date-input" placeholder="дд.мм.гггг">
+                        <button type="button" class="btn calendar-btn">📅</button>
+                    </div>
+                    <div id="calendarPopup" class="calendar-popup hidden"></div>
+                </div>
+                <button class="save-btn" id="saveGradesBtn">Сохранить оценки</button>
+                <button class="save-btn attendance-btn" id="saveAttendanceBtn">Сохранить посещаемость</button>
+            </div>
+
+            <h3 style="margin: 25px 0 15px 0;">Оценки</h3>
+            <div class="table-container">
+                <table class="grades-table" id="teacherTable">
+                    <thead id="teacherTableHead"></thead>
+                    <tbody id="teacherTableBody"></tbody>
+                </table>
+            </div>
+
+            <h3 style="margin: 30px 0 15px 0;">Посещаемость</h3>
+            <div class="table-container">
+                <table class="grades-table" id="attendanceTable">
+                    <thead id="attendanceTableHead"></thead>
+                    <tbody id="attendanceTableBody"></tbody>
+                </table>
+            </div>
+
+            <div class="instructions">
+                <h3>Инструкция</h3>
+                <ul>
+                    <li>Выберите дату с помощью календаря или введите вручную в формате дд.мм.гггг</li>
+                    <li><strong>Оценки:</strong> введите числовую оценку (1-10) или текстовую (ЗЧ, Н и т.д.)</li>
+                    <li><strong>Посещаемость:</strong> 
+                        ✓ - присутствовал, 
+                        ○ - отсутствовал, 
+                        число (например, 5) - опоздание в минутах
+                    </li>
+                    <li>Оставьте поле пустым для удаления отметки</li>
+                    <li>Не забудьте нажать соответствующую кнопку сохранения после редактирования</li>
+                </ul>
+            </div>
+        </main>
+    </div>
 
     <script src="js/auth.js"></script>
     <script src="js/calendar.js"></script>

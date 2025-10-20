@@ -294,6 +294,14 @@ body {
     background-color: #059669;
 }
 
+.attendance-btn {
+    background-color: #8b5cf6;
+}
+
+.attendance-btn:hover {
+    background-color: #7c3aed;
+}
+
 /* Grades Table */
 .table-container {
     background: white;
@@ -389,6 +397,22 @@ body {
 .grade-input:focus {
     outline: none;
     border-color: #3b82f6;
+    background-color: white;
+}
+
+.attendance-input {
+    width: 40px;
+    padding: 4px;
+    text-align: center;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background-color: transparent;
+    font-size: 14px;
+}
+
+.attendance-input:focus {
+    outline: none;
+    border-color: #8b5cf6;
     background-color: white;
 }
 
