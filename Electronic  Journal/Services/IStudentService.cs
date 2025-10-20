@@ -9,5 +9,7 @@ namespace Electronic__Journal.Services
         Task<LinkedList<Subject>> GetStudentSubjectsAsync(int groupId);
 
         Task<LinkedList<Mark>> GetStudentMarksAsync(int studentId);
+
+        Task<LinkedList<Absense>> GetStudentAbsensesAsync(int studentId);
     }
 }

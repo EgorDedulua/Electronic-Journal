@@ -63,6 +63,11 @@ namespace Electronic__Journal.Services
                     }
                 }
             }
+            catch (SqliteException ex)
+            {
+                _logger.LogError(ex, "Произошла ошибка в базе данных!");
+                return null!;
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Ошибка при аутентификации пользователя {login}");

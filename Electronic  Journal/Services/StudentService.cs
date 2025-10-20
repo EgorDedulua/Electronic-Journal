@@ -48,6 +48,11 @@ namespace Electronic__Journal.Services
                     }
                 }
             }
+            catch (SqliteException ex)
+            {
+                _logger.LogError(ex, "Произошла ошибка в базе данных!");
+                return null!;
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Неизвестная ошибка на стороне сервера!");
@@ -96,11 +101,16 @@ namespace Electronic__Journal.Services
                         }
                         else
                         {
-                            _logger.LogError($"Не найдены оценки для пользователя с Id {studentId}");
+                            _logger.LogInformation($"Не найдены оценки для пользователя с Id {studentId}");
                             return null!;
                         }
                     }
                 }
+            }
+            catch (SqliteException ex)
+            {
+                _logger.LogError(ex, "Произошла ошибка в базе данных!");
+                return null!;
             }
             catch (Exception ex)
             {
@@ -109,5 +119,53 @@ namespace Electronic__Journal.Services
             }
         }
 
+        public async Task<LinkedList<Absense>> GetStudentAbsensesAsync(int studentId)
+        {
+            try
+            {
+                using var connection = new SqliteConnection(_connectionString);
+                var connectionTask = connection.OpenAsync();
+                string commandText = @"SELECT Absenses.Id, Absenses.""Date"", Subjects.Name AS SubjectName,
+                                       group_concat(Users.LastName || ' ' || Users.FirstName || ' ' || Users.MiddleName, ',') AS TeacherName
+                                       FROM Absenses
+                                       JOIN Subjects ON Absenses.SubjectId = Subjects.Id
+                                       JOIN Users ON Users.Id = Absenses.TeacherId
+                                       WHERE Absenses.StudentId = @studentId
+                                       GROUP BY Absenses.Id, Absenses.""Date"", Subjects.Name;";
+                var command = new SqliteCommand(commandText);
+                command.Parameters.AddWithValue("@studentId", studentId);
+                await connectionTask;
+                command.Connection = connection;
+                using var reader = await command.ExecuteReaderAsync();
+                if (reader.HasRows)
+                {
+                    LinkedList<Absense> studentAbsenses = new LinkedList<Absense>();
+                    while (await reader.ReadAsync())
+                    {
+                        studentAbsenses.AddLast(new Absense()
+                        {
+                            Id = Convert.ToInt32(reader["Id"]),
+                            StudentId = studentId,
+                            TeacherName = reader["TeacherName"].ToString(),
+                            SubjectName = reader["SubjectName"].ToString(),
+                            Date = reader["Date"].ToString()
+                        });
+                    }
+                    return studentAbsenses;
+                }
+                _logger.LogInformation($"Не найдены отсутствия для студента с id {studentId}");
+                return null!;
+            }
+            catch (SqliteException ex)
+            {
+                _logger.LogError(ex, "Произошла ошибка в базе данных!");
+                return null!;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Произошла неизветсная ошибка на стороне сервера!");
+                return null!;
+            }
+        }
     }
 }
