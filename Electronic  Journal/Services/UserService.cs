@@ -58,7 +58,6 @@ namespace Electronic__Journal.Services
                             _logger.LogInformation($"Успешная авторизация пользователя {login}");
                             return user;
                         }
-                        _logger.LogError($"Неудачная ошибка аутентификации пользователя {login}");
                         return null!;
                     }
                 }
@@ -70,7 +69,7 @@ namespace Electronic__Journal.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Ошибка при аутентификации пользователя {login}");
+                _logger.LogError(ex, "Неизветсная ошибка на стороне сервера!");
                 return null!;
             }
         }

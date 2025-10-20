@@ -26,7 +26,6 @@ namespace Electronic__Journal.Controllers
                 LinkedList<Subject> subjects = await _studentService.GetStudentSubjectsAsync(groupId);
                 if (subjects == null)
                 {
-                    _logger.LogError($"Не найдены предметы у студента с группой {groupId}");
                     return BadRequest("Не найдены предметы!");
                 }
                 _logger.LogInformation($"Найдены предметы у студента с группой {groupId}");
@@ -47,7 +46,6 @@ namespace Electronic__Journal.Controllers
                 LinkedList<Mark> markList = await _studentService.GetStudentMarksAsync(studentId);
                 if (markList == null)
                 {
-                    _logger.LogError($"У студента с id {studentId} не найдены оценки");
                     return NoContent();
                 }
                 _logger.LogError($"Найдены оценки для студента с id {studentId}");

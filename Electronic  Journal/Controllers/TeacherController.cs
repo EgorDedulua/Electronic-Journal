@@ -25,7 +25,6 @@ namespace Electronic__Journal.Controllers
                 LinkedList<Electronic__Journal.Models.Group> teacherGroups = await _teacherService.GetTeacherGroupsAsync(teacherId);
                 if (teacherGroups == null)
                 {
-                    _logger.LogError($"Не найдены группы для преподавателя с id {teacherId}");
                     return BadRequest("Не найдены группы!");
                 }
                 _logger.LogInformation($"Найдены группы для преподавателя с id {teacherId}");
