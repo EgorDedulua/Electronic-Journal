@@ -17,6 +17,8 @@ namespace Electronic__Journal
             builder.Services.AddLogging();
             var app = builder.Build();
 
+            app.UseStaticFiles();
+
             app.UseRouting();
 
             app.UseHttpsRedirection();
@@ -26,6 +28,10 @@ namespace Electronic__Journal
 
             app.MapControllers();
 
+            app.MapGet("/", async context =>
+            {
+                context.Response.Redirect("/index.html");
+            });
             app.Run();
         }
     }

@@ -19,7 +19,7 @@ namespace Electronic__Journal.Controllers
             _logger = logger;
         }
 
-        [HttpGet("login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] JsonElement request)
         {
             try

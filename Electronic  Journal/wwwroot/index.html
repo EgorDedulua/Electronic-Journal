@@ -19,33 +19,52 @@
                     <label for="password">Пароль</label>
                     <input type="password" id="password" required>
                 </div>
-                <button type="submit" class="btn" id="btn">Войти</button>
+                <button type="submit" class="btn" id="btn" onclick="login(event)">Войти</button>
             </form>
             <div class="demo-info">
                 <p><strong>Демо-доступы:</strong></p>
-                <p>Студент: ivan.petrov / student123</p>
-                <p>Преподаватель: teacher.ivanova / teacher123</p>
+                <p>Студент: Darv1n / RDGP_3624</p>
+                <p>Преподаватель: Kudl / 1234</p>
             </div>
         </div>
     </div>
     <script>
-        async function login() {
-            const url = "https://localhost:7176"
+        async function login(event) {
+            event.preventDefault();
+            const url = "https://localhost:7287"
             const username = document.getElementById("username").value
             const password = document.getElementById("password").value
             try {
                 const response = await fetch(`${url}/User/login`,
                     {
-                        method: `GET`,
+                        method: `POST`,
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({Login:username,Password:password})
+                        body: JSON.stringify({ Login: username, Password: password })
                     }
                 )
-                if (response.status == '200') {
-                    document.getElementById('btn').textContent="Kruto"
+                if (response.ok) {
+                    const userData = await response.json(); 
+                    console.log('Данные пользователя:', userData);
+
+                    const userType = userData.type;
+                    console.log('Тип пользователя:', userType);
+                    document.getElementById('btn').textContent = "Успешно!";
+                    setTimeout(() => {
+                        if (userType === 0) {
+                            window.location.href = 'student.html';
+                        } else if (userType === 1) {
+                            window.location.href = 'teacher.html';
+                        } else {
+                            console.error('Неизвестный тип пользователя:', userType);
+                            document.getElementById('btn').textContent = "Ошибка типа!";
+                        }
+                    }, 1000);
                 }
+            }
+            catch (err) {
+
             }
         }
     </script>
