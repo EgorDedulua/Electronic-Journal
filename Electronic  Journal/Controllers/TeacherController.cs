@@ -36,5 +36,25 @@ namespace Electronic__Journal.Controllers
                 return StatusCode(500, "Произошла ошибка на стороне сервера!");
             }
         }
+
+        [HttpGet("{teacherId}/{groupId}/subjects")]
+        public async Task<IActionResult> GetTeacherGroupsSubjects(int teacherId, int groupId)
+        {
+            try
+            {
+                LinkedList<Subject> groupSubjectsList = await _teacherService.GetTeacherGroupsSubjectsAsync(teacherId, groupId);
+                if (groupSubjectsList == null)
+                {
+                    return BadRequest($"Не найдены предметы, которые ведет преподаватель с id {teacherId} у группы с id {groupId}");
+                }
+                _logger.LogInformation($"Найдены предметы, которые ведет преподаватель с id {teacherId} у группы с id {groupId}");
+                return Ok(groupSubjectsList);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Неизветсная ошибка на стороне сервера!");
+                return StatusCode(500, "Произошла неизвестная ошибка на стороне сервера!");
+            }
+        }
     }
 }

@@ -48,8 +48,28 @@ namespace Electronic__Journal.Controllers
                 {
                     return NoContent();
                 }
-                _logger.LogError($"Найдены оценки для студента с id {studentId}");
+                _logger.LogInformation($"Найдены оценки для студента с id {studentId}");
                 return Ok(markList);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Неизвестная ошибка на стороне сервера!");
+                return StatusCode(500, "На сервере произошла ошибка при обработке запроса!");
+            }
+        }
+
+        [HttpGet("{studentId}/absenses")]
+        public async Task<IActionResult> GetStudentAbsenses(int studentId)
+        {
+            try
+            {
+                LinkedList<Absense> absenseList = await _studentService.GetStudentAbsensesAsync(studentId);
+                if (absenseList == null)
+                {
+                    return NoContent();
+                }
+                _logger.LogInformation($"Найдены оценки для студента с id {studentId}");
+                return Ok(absenseList);
             }
             catch (Exception ex)
             {

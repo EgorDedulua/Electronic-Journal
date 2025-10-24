@@ -61,5 +61,48 @@ namespace Electronic__Journal.Services
                 return null!;
             }
         }
+
+        public async Task<LinkedList<Subject>> GetTeacherGroupsSubjectsAsync(int teacherId, int groupId)
+        {
+            try
+            {
+                using var connection = new SqliteConnection(_connectionString);
+                var connectionTask = connection.OpenAsync();
+                string commandText = @"SELECT Subjects.Name, Subjects.Id FROM Groups_Subjects
+                                       JOIN Subjects ON Subjects.Id = Groups_Subjects.SubjectId
+                                       WHERE Groups_Subjects.TeacherId = @teacherId AND Groups_Subjects.GroupId = @groupId";
+                var command = new SqliteCommand(commandText);
+                command.Parameters.AddWithValue("@teacherId", teacherId);
+                command.Parameters.AddWithValue("@groupId", groupId);
+                await connectionTask;
+                command.Connection = connection;
+
+                using var reader = await command.ExecuteReaderAsync();
+                if (reader.HasRows)
+                {
+                    LinkedList<Subject> groupSubjectsList = new LinkedList<Subject>();
+                    while (await reader.ReadAsync())
+                    {
+                        groupSubjectsList.AddLast(new Subject() { Id = Convert.ToInt32(reader["Id"]), Name = reader["Name"].ToString() });
+                    }
+                    return groupSubjectsList;
+                }
+                else
+                {
+                    _logger.LogError($"Не найдены предметы, которые ведет преподаватель с id {teacherId} у группы с id {groupId}");
+                    return null!;
+                }
+            }
+            catch (SqliteException ex)
+            {
+                _logger.LogError(ex, "Произошла ошибка в базе данных!");
+                return null!;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Произошла неизвестная ошибка на стороне сервера!");
+                return null!;
+            }
+        }
     }
 }
