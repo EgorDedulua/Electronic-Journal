@@ -1,6 +1,5 @@
-﻿// Конфигурация API
-const API_BASE_URL = 'https://localhost:7287';
-const STUDENT_ID = 1; // В реальном приложении это должно быть динамическим
+﻿const API_BASE_URL = 'https://localhost:7287';
+const STUDENT_ID = 1;
 
 // Глобальные переменные для данных
 let allMarks = [];

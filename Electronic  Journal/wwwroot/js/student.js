@@ -15,7 +15,6 @@ class StudentDashboard {
             this.renderMarksTable();
             this.renderAbsencesTable();
             this.updateStatistics();
-
         } catch (error) {
             console.error('Ошибка инициализации:', error);
             Utils.showError('gradesError', 'Не удалось загрузить данные. Попробуйте обновить страницу.');

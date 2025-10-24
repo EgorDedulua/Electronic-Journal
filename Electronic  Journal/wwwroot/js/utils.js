@@ -1,13 +1,11 @@
-﻿// Утилитарные функции
-class Utils {
+﻿class Utils {
     static formatDate(dateString) {
         try {
-            // Преобразуем разные форматы дат (с точками и дефисами)
             const normalizedDate = dateString.replace(/\./g, '-');
             const date = new Date(normalizedDate);
 
             if (isNaN(date.getTime())) {
-                return dateString; // Возвращаем исходную строку если не удалось распарсить
+                return dateString;
             }
 
             return date.toLocaleDateString('ru-RU', {
@@ -69,8 +67,6 @@ class Utils {
         };
     }
 }
-
-// Функции для работы с DOM
 class DOMUtils {
     static createElement(tag, className, textContent = '') {
         const element = document.createElement(tag);
