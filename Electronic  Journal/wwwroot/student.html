@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Электронный журнал - Студент</title>
-    <link rel="stylesheet" href="cssstyle.css">
+    <link rel="stylesheet" href="zxcT.css">
 </head>
 <body>
     <!-- Student Dashboard -->
@@ -17,8 +17,8 @@
                 </div>
                 <div class="user-info">
                     <div class="user-details">
-                        <div class="user-name" id="studentName"></div>
-                        <div class="user-group" id="studentGroup"></div>
+                        <div class="user-name" id="studentName">Загрузка...</div>
+                        <div class="user-group" id="studentGroup">Группа: Загрузка...</div>
                     </div>
                     <button class="logout-btn" onclick="logout()">Выход</button>
                 </div>
@@ -29,20 +29,46 @@
             <h2 class="page-title">Мои оценки</h2>
             <p class="page-subtitle">Просмотр успеваемости по предметам</p>
 
+            <div class="filter-controls">
+                <select id="subjectFilter" class="filter-select" onchange="filterGrades()">
+                    <option value="">Все предметы</option>
+                </select>
+            </div>
+
             <div class="table-container">
-                <table class="grades-table" id="studentTable">
-                    <thead id="studentTableHead"></thead>
+                <div id="gradesLoading" class="loading">Загрузка оценок...</div>
+                <div id="gradesError" class="error" style="display: none;"></div>
+                <table class="grades-table" id="studentTable" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>Предмет</th>
+                            <th>Оценка</th>
+                            <th>Преподаватель</th>
+                            <th>Дата</th>
+                        </tr>
+                    </thead>
                     <tbody id="studentTableBody"></tbody>
                 </table>
             </div>
-            <h2 class="page-title" style="margin-top: 40px;">Моя посещаемость</h2>
-            <p class="page-subtitle">Просмотр посещаемости по предметам</p>
+
+            <h2 class="page-title" style="margin-top: 40px;">Мои пропуски</h2>
+            <p class="page-subtitle">Просмотр пропусков по предметам</p>
+
             <div class="table-container">
-                <table class="grades-table" id="studentAttendanceTable">
-                    <thead id="studentAttendanceTableHead"></thead>
+                <div id="absencesLoading" class="loading">Загрузка пропусков...</div>
+                <div id="absencesError" class="error" style="display: none;"></div>
+                <table class="grades-table" id="studentAttendanceTable" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>Предмет</th>
+                            <th>Дата</th>
+                            <th>Преподаватель</th>
+                        </tr>
+                    </thead>
                     <tbody id="studentAttendanceTableBody"></tbody>
                 </table>
             </div>
+
             <div class="stats-container">
                 <h3 class="stats-title">Статистика</h3>
                 <div class="stats-grid">
@@ -58,14 +84,12 @@
                         <div class="stat-label">Пропусков</div>
                         <div class="stat-value" id="totalAbsences">0</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Опозданий</div>
-                        <div class="stat-value" id="totalLates">0</div>
-                    </div>
                 </div>
             </div>
         </main>
     </div>
-    <script></script>
+    <script src="api.js"></script>
+    <script src="utils.js"></script>
+    <script src="student.js"></script>
 </body>
 </html>
