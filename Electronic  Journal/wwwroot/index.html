@@ -47,7 +47,6 @@
                 if (response.ok) {
                     const userData = await response.json(); 
                     console.log('Данные пользователя:', userData);
-
                     const userType = userData.type;
                     console.log('Тип пользователя:', userType);
                     document.getElementById('btn').textContent = "Успешно!";
